@@ -27,8 +27,8 @@
 ![고속도로 시나리오 빨리 감기](docs/media/demo-timelapse.gif)
 
 - 위 GIF는 100초를 약 13초로 줄인 빨리 감기입니다.
-- 원본 영상: [demo-highway-100s.mp4](docs/media/demo-highway-100s.mp4)
-  - 에뮬레이터 전체 화면이고 길이는 1분 52초입니다.
+- 원본 영상: [demo-highway-100s.mp4 내려받기](https://github.com/duqorrhdrks/teum-pleos-app/raw/master/docs/media/demo-highway-100s.mp4)
+  - 21MB, 에뮬레이터 전체 화면이고 길이는 1분 52초입니다.
   - 화면 녹화라 소리는 들어 있지 않습니다.
 - 흐름: 정속 주행 '틈' → 합류 접근 '주의' → 합류 '집중'(약 39초, 음성 중단·알림 보류) → 다시 '틈'(긴급 알림 먼저, 끊긴 이야기 요약 뒤 이어 말하기, 모인 알림 일괄 전달) → 100초에 주행 끝 브리핑
 
