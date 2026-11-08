@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!--
+          다른 앱 알림 수집. AAOS에서 서드파티 알림 접근 허용 UI가 없을 수 있어 기본 비활성처럼 동작한다.
+          허용: adb shell cmd notification allow_listener app.teum/app.teum.notificationqueue.TeumNotificationListener
+          (scripts/enable-notification-listener.sh). 허용되지 않으면 데모 소스·부하 인지 API 위임으로 동작한다.
+        -->
+        <service
+            android:name="app.teum.notificationqueue.TeumNotificationListener"
+            android:exported="true"
+            android:label="틈 알림 조율"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

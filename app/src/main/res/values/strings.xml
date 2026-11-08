@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">틈</string>
+    <string name="perm_read_load_label">틈 운전 부하 단계 읽기</string>
+    <string name="perm_read_load_desc">운전 부하 단계(집중·주의·틈)를 읽습니다. 차속·위치 같은 주행 원본 데이터는 포함하지 않습니다.</string>
+    <string name="perm_submit_label">틈에 알림 전달 맡기기</string>
+    <string name="perm_submit_desc">이 앱의 알림을 틈이 운전 부하에 맞춰 보류했다가 음성으로 전달합니다.</string>
+    <string name="fgs_channel">틈 실행 상태</string>
+</resources>

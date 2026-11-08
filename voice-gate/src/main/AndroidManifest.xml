@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pleos TextToSpeech: 문서 TextToSpeech/declaring-permissions -->
+    <uses-permission android:name="pleos.car.permission.TTS_SERVICE" />
+    <!-- Pleos SpeechToText: 문서 SpeechToText/declaring-permissions. 마이크는 차량 Speech Service가 연다. -->
+    <uses-permission android:name="pleos.car.permission.STT_SERVICE" />
+    <!-- Pleos LLM: 공개 문서 페이지는 없지만 Pleos Connect Emulator v2.1.0에 권한이 정의되어 있고 granted=true 확인 -->
+    <uses-permission android:name="pleos.car.permission.LLM_SERVICE" />
+    <!-- Android TextToSpeech 대체 엔진 사용을 위한 패키지 가시성 -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+</manifest>

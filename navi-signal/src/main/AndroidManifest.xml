@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- NaviHelper get*Info() (getTBTInfo, getRouteStateInfo): 문서 NaviHelper/declaring-permissions,
+         에뮬레이터 실행으로 확인. 경로 검색·변경 권한(NAVI_ROUTE_SEARCH)은 쓰지 않는다. -->
+    <uses-permission android:name="pleos.car.permission.NAVI_ROUTE" />
+</manifest>

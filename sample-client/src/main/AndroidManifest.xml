@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-feature android:name="android.hardware.type.automotive" android:required="true" />
+
+    <!-- 틈 부하 인지 API -->
+    <uses-permission android:name="app.teum.permission.READ_LOAD_STATE" />
+    <uses-permission android:name="app.teum.permission.SUBMIT_MESSAGE" />
+    <!-- 예제 3: 보통 앱처럼 시스템 알림을 올려 틈의 알림 수집을 확인 -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Android 11+ 패키지 가시성: 틈에 바인드하려면 필요 -->
+    <queries>
+        <package android:name="app.teum" />
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:label="틈 연동 예제"
+        android:theme="@android:style/Theme.Material.NoActionBar">
+        <activity android:name=".SampleActivity" android:exported="true">
+            <meta-data android:name="distractionOptimized" android:value="true" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

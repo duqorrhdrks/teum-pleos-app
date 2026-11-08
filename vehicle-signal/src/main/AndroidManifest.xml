@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- AAOS 표준 속성 (CarPropertyManager) -->
+    <!-- PERF_VEHICLE_SPEED: Car.PERMISSION_SPEED (런타임 권한) -->
+    <uses-permission android:name="android.car.permission.CAR_SPEED" />
+    <!-- GEAR_SELECTION: Car.PERMISSION_POWERTRAIN -->
+    <uses-permission android:name="android.car.permission.CAR_POWERTRAIN" />
+    <!-- PERF_STEERING_ANGLE: Car.PERMISSION_READ_STEERING_STATE -->
+    <uses-permission android:name="android.car.permission.READ_CAR_STEERING" />
+
+    <!-- Pleos Vehicle SDK: 공식 문서 Vehicle/vehicle-permission과 에뮬레이터 실행으로 확인한 값 -->
+    <!-- Brake.registerBrakePedalStatus / Gear / SteeringWheel angle -->
+    <uses-permission android:name="pleos.car.permission.CAR_DRIVE" />
+    <!-- TurnSignal.registerTurnSignalState -->
+    <uses-permission android:name="pleos.car.permission.CAR_LIGHTS" />
+    <!-- Wiper.registerWiperState / getCurrentWiperSwitch -->
+    <uses-permission android:name="pleos.car.permission.CAR_WINDOWS" />
+</manifest>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 커스텀 권한(<permission>)은 여기 두지 않는다. 이 모듈은 연동 앱(:sample-client)도 쓰므로
+     정의가 두 앱에 들어가면 서명이 다를 때 설치가 실패한다. 권한 정의는 :app 매니페스트에 있다. -->
+<manifest />
