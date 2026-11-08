@@ -50,11 +50,29 @@ class DemoMessageSource(private val nowMs: () -> Long = SystemClock::elapsedReal
  * 다른 앱 알림을 수집해 [MessageBus]로 보낸다. 원 알림은 건드리지 않는다(취소·스누즈 없음).
  * AAOS에서 서드파티 앱의 알림 접근 허용 여부는 [NotificationAccess.isGranted]로 먼저 확인한다.
  */
+/** 시스템이 사람에게 온 메시지가 아닌 것으로 표시하는 알림 분류. 운전자에게 읽어 줄 필요가 없다. */
+private val NON_MESSAGE_CATEGORIES = setOf(
+    Notification.CATEGORY_SERVICE, Notification.CATEGORY_PROGRESS, Notification.CATEGORY_TRANSPORT,
+    Notification.CATEGORY_SYSTEM, Notification.CATEGORY_STATUS, Notification.CATEGORY_NAVIGATION,
+)
+
+/**
+ * 틈이 모아서 전할 알림인지 판단한다.
+ * "○○이(가) 실행 중입니다" 같은 포그라운드 서비스 알림, 지울 수 없는 알림, 그룹 요약,
+ * 재생·진행률·내비 같은 상태 알림은 메시지가 아니므로 거른다(2026-11-08 에뮬레이터에서
+ * MusicVisualizer 실행 알림을 메시지로 읽은 문제).
+ */
+fun isPersonMessage(flags: Int, category: String?): Boolean {
+    val skipFlags = Notification.FLAG_FOREGROUND_SERVICE or Notification.FLAG_NO_CLEAR or
+        Notification.FLAG_ONGOING_EVENT or Notification.FLAG_GROUP_SUMMARY
+    return flags and skipFlags == 0 && category !in NON_MESSAGE_CATEGORIES
+}
+
 class TeumNotificationListener : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         if (sbn.packageName == packageName || sbn.isOngoing) return
         val n = sbn.notification
-        if (n.flags and Notification.FLAG_GROUP_SUMMARY != 0) return
+        if (!isPersonMessage(n.flags, n.category)) return
         val extras = n.extras
         val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()?.trim().orEmpty()
         val text = (extras.getCharSequence(Notification.EXTRA_BIG_TEXT) ?: extras.getCharSequence(Notification.EXTRA_TEXT))

@@ -116,6 +116,29 @@ class VoiceGateTest {
     }
 
     @Test
+    @DisplayName("요약 재개 화면 상태: 요약을 만드는 동안 '준비 중', 요약을 말하는 동안 그 문장이 '말하는 중'에 보인다")
+    fun resumeStatusShowsSummary() = runTest {
+        val engine = FakeEngine(this, msPerChar = 100)
+        val load = MutableStateFlow<LoadState?>(state(Stage.GAP))
+        val summary = "아까 일정 이야기 중이었어요."
+        // 응답이 늦는 요약기(에뮬레이터의 꺼진 기기 내 LLM처럼): 1초 뒤에 답한다
+        val gate = VoiceGate(backgroundScope, engine, { _, _ -> delay(1_000); summary }, load, MutableStateFlow(true))
+        gate.say(Utterance("첫째 문장입니다. 둘째 문장은 조금 깁니다.", long = true))
+        advanceTimeBy(1_200)
+        load.value = state(Stage.FOCUS)
+        runCurrent()
+        advanceTimeBy(2_000)
+        load.value = state(Stage.GAP)
+        advanceTimeBy(800) // 재개 전 쉬는 시간(300ms) 뒤, 요약기를 기다리는 중
+        assertTrue(gate.status.value.preparingResume, "요약 준비 중 표시: ${gate.status.value}")
+        assertEquals(false, gate.status.value.speaking)
+        advanceTimeBy(1_000) // 요약을 말하는 중(15자 = 1.5초)
+        assertEquals(VoiceStatus(speaking = true, current = summary), gate.status.value)
+        advanceTimeBy(10_000)
+        assertEquals(VoiceStatus(), gate.status.value)
+    }
+
+    @Test
     @DisplayName("사전 보류 중에는 긴 발화를 시작하지 않고, 짧은 발화는 말한다")
     fun preHoldBlocksLongOnly() = runTest {
         val engine = FakeEngine(this)

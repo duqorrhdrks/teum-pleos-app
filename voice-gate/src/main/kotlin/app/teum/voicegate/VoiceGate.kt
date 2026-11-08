@@ -66,6 +66,8 @@ data class VoiceStatus(
     val current: String? = null,
     val pending: Int = 0,
     val heldReason: String? = null,
+    /** 집중이 끝나 끊긴 이야기를 요약하는 중(요약을 말하기 전). */
+    val preparingResume: Boolean = false,
 )
 
 /**
@@ -231,13 +233,22 @@ class VoiceGate(
                 p.interrupted = false
                 val spoken = u.sentences.take(p.index)
                 val summary = if (gateValue.enabled && spoken.isNotEmpty()) {
-                    withTimeoutOrNull(summaryTimeoutMs) {
-                        summarizer.summarize(spoken, u.sentences.drop(p.index))
-                    } ?: HeuristicSummarizer.summarize(spoken)
+                    _status.value = _status.value.copy(preparingResume = true, heldReason = null)
+                    try {
+                        withTimeoutOrNull(summaryTimeoutMs) {
+                            summarizer.summarize(spoken, u.sentences.drop(p.index))
+                        } ?: HeuristicSummarizer.summarize(spoken)
+                    } finally {
+                        _status.value = _status.value.copy(preparingResume = false)
+                    }
                 } else null
                 _events.emit(VoiceEvent.Resumed(u.id, summary, p.index))
                 if (summary != null) {
-                    if (speakGuarded(summary) == Outcome.CUT) {
+                    // 요약 문장도 화면의 '말하는 중'에 보여 준다
+                    _status.value = _status.value.copy(speaking = true, current = summary, heldReason = null)
+                    val cut = speakGuarded(summary) == Outcome.CUT
+                    _status.value = _status.value.copy(speaking = false, current = null)
+                    if (cut) {
                         p.interrupted = true // 요약 중에 다시 집중: 다음에 또 요약부터
                         continue
                     }

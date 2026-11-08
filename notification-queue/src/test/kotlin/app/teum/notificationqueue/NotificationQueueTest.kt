@@ -1,5 +1,6 @@
 package app.teum.notificationqueue
 
+import android.app.Notification
 import app.teum.core.dli.LoadState
 import app.teum.core.dli.Stage
 import app.teum.core.dli.VehicleSnapshot
@@ -120,5 +121,20 @@ class NotificationQueueTest {
         assertTrue(text.startsWith("기다려 둔 알림 6건이에요."))
         assertTrue(text.contains("a님 메시지 1건, 전화 1통, 내용0"))
         assertTrue(text.endsWith("그 밖에 2명에게서 온 알림이 있어요."))
+    }
+
+    @Test
+    @DisplayName("다른 앱 알림 거르기: 실행 중·지울 수 없는·상태 알림은 빼고 사람이 보낸 메시지만 모은다")
+    fun personMessageFilter() {
+        // 2026-11-08 에뮬레이터: "MusicVisualizer이(가) 실행 중입니다" (flags=0x860, 분류 없음)
+        assertFalse(isPersonMessage(0x860, null))
+        assertFalse(isPersonMessage(Notification.FLAG_FOREGROUND_SERVICE, null))
+        assertFalse(isPersonMessage(Notification.FLAG_NO_CLEAR, Notification.CATEGORY_MESSAGE))
+        assertFalse(isPersonMessage(Notification.FLAG_GROUP_SUMMARY, Notification.CATEGORY_MESSAGE))
+        assertFalse(isPersonMessage(0, Notification.CATEGORY_TRANSPORT))
+        assertFalse(isPersonMessage(0, Notification.CATEGORY_PROGRESS))
+        assertTrue(isPersonMessage(0, Notification.CATEGORY_MESSAGE))
+        assertTrue(isPersonMessage(Notification.FLAG_AUTO_CANCEL, null))
+        assertTrue(isPersonMessage(0, Notification.CATEGORY_MISSED_CALL))
     }
 }

@@ -165,6 +165,7 @@ fun DrivingScreen(engine: LoadEngine) {
                             listening -> "듣는 중…"
                             voice.heldReason != null -> "보류 · ${voice.heldReason}"
                             voice.speaking -> if (showText) "말하는 중 · ${voice.current}" else "말하는 중"
+                            voice.preparingResume -> "하던 이야기 이어 갈 준비 중"
                             voice.pending > 0 -> "대기 ${voice.pending}건"
                             else -> "조용함"
                         },
